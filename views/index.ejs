@@ -1,2 +1,12 @@
 <%- include ./partials/header %>
 <h1>H O M E</h1>
+<% posts.forEach(post => { %>
+<div>
+  <p>title: <%= post.title %></p>
+  <p>description: <%= post.body %></p>
+  <img src="<%= post.image %>" alt="image" />
+  <p><%= post.createdAt.toDateString() %></p>
+  <button><a href="/posts/<%=post._id%>">Read more</a></button>
+</div>
+<br /><br />
+<% }) %>

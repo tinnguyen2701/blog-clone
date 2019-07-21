@@ -5,7 +5,10 @@ const dotenv = require("dotenv");
 const flash = require("connect-flash");
 const session = require("express-session");
 
+const homeRouter = require("./routers/homeRouter");
 const authRouter = require("./routers/authRouter");
+const postRouter = require("./routers/postRouter");
+const commentRouter = require("./routers/commentRouter");
 
 // config environment
 dotenv.config();
@@ -39,17 +42,19 @@ require("./config/passport")(app);
 
 // customize middleware
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
   next();
 });
 
 // routers
-app.get("/", (req, res) => {
-  return res.render("index");
-});
+app.use("/", homeRouter);
 app.use("/auth", authRouter);
+app.use("/posts", postRouter);
+app.use("/posts/:postId/comments", commentRouter);
 
+// start server
 app.listen(process.env.PORT, () =>
   console.log("server is running on port " + process.env.PORT)
 );
